@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deployment
+  namespace: ysc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      nodeSelector:
+        mynode: mynode
+      containers:
+        - name: tomcat
+          image: tomcat1109
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: webapps
+              mountPath: /apps/tomcat-web1/webapps/
+          ports:
+           - containerPort: 8080 
+      volumes:
+        - name: webapps
+          hostPath:
+            path: /root/zn/webapps
+            type: Directory
